@@ -1,8 +1,10 @@
-#include <iostream>
-
-using namespace std;
+#include <stdio.h>
 
 #define N 4
+#define true 1
+#define false 0
+
+typedef int bool;
 
 void display(int board[N][N]);
 bool solveNQ(int board[N][N], int col);
@@ -16,6 +18,23 @@ void display(int board[N][N]) {
         }
         printf("\n");
     }
+}
+
+bool solveNQ(int board[N][N], int col) {
+    int i;
+    if(col >= N) {
+        return true;
+    }
+    for(i = 0; i < N; i++) {
+        if(isSafePos(board, i, col) == true) {
+            board[i][col] = 1;
+            if(solveNQ(board, col+1) == true) {
+                return true;
+            }
+            board[i][col] = 0;
+        }
+    }
+    return false;
 }
 
 bool isSafePos(int board[N][N], int row, int col) {
@@ -38,27 +57,11 @@ bool isSafePos(int board[N][N], int row, int col) {
     return true;
 }
 
-bool solveNQ(int board[N][N], int col) {
-    int i;
-    if(col >= N) {
-        return true;
-    }
-    for(i = 0; i < N; i++) {
-        if(isSafePos(board, i, col) == true) {
-            board[i][col] = 1;
-            if(solveNQ(board, col+1) == true) {
-                return true;
-            }
-            board[i][col] = 0;
-        }
-    }
-    return false;
-}
+int main(void) {
 
-int main() {
     int board[N][N] = {0};
 
-    if(!solveNQ(board, 0)) {
+    if(solveNQ(board, 0) == false) {
         printf("No solution!\n");
     } else {
         display(board);
@@ -66,3 +69,5 @@ int main() {
 
     return 0;
 }
+
+
